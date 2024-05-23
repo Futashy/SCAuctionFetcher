@@ -51,7 +51,10 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.saveSessionButton = new System.Windows.Forms.Button();
+            this.loadSessionButton = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.textIdBox = new System.Windows.Forms.TextBox();
             this.textNameBox = new System.Windows.Forms.TextBox();
@@ -63,18 +66,15 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.loadSessionButton = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -323,7 +323,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 11;
-            this.label4.Text = "Version : 1.1.3";
+            this.label4.Text = "Version : 1.1.5";
             // 
             // tabControl1
             // 
@@ -352,6 +352,19 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Main";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.groupBox2.Controls.Add(this.saveSessionButton);
+            this.groupBox2.Controls.Add(this.loadSessionButton);
+            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.groupBox2.Location = new System.Drawing.Point(6, 335);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(182, 80);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Session";
+            // 
             // saveSessionButton
             // 
             this.saveSessionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
@@ -364,6 +377,30 @@
             this.saveSessionButton.Text = "Save";
             this.saveSessionButton.UseVisualStyleBackColor = false;
             this.saveSessionButton.Click += new System.EventHandler(this.saveSessionButton_Click);
+            // 
+            // loadSessionButton
+            // 
+            this.loadSessionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.loadSessionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.loadSessionButton.ForeColor = System.Drawing.Color.Black;
+            this.loadSessionButton.Location = new System.Drawing.Point(95, 19);
+            this.loadSessionButton.Name = "loadSessionButton";
+            this.loadSessionButton.Size = new System.Drawing.Size(77, 50);
+            this.loadSessionButton.TabIndex = 8;
+            this.loadSessionButton.Text = "Load";
+            this.loadSessionButton.UseVisualStyleBackColor = false;
+            this.loadSessionButton.Click += new System.EventHandler(this.loadSessionButton_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.groupBox3.Controls.Add(this.checkBoxBrowser);
+            this.groupBox3.Controls.Add(this.checkBoxConsole);
+            this.groupBox3.Location = new System.Drawing.Point(6, 157);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(240, 38);
+            this.groupBox3.TabIndex = 12;
+            this.groupBox3.TabStop = false;
             // 
             // tabPage2
             // 
@@ -493,43 +530,6 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Debug";
             // 
-            // loadSessionButton
-            // 
-            this.loadSessionButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
-            this.loadSessionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.loadSessionButton.ForeColor = System.Drawing.Color.Black;
-            this.loadSessionButton.Location = new System.Drawing.Point(95, 19);
-            this.loadSessionButton.Name = "loadSessionButton";
-            this.loadSessionButton.Size = new System.Drawing.Size(77, 50);
-            this.loadSessionButton.TabIndex = 8;
-            this.loadSessionButton.Text = "Load";
-            this.loadSessionButton.UseVisualStyleBackColor = false;
-            this.loadSessionButton.Click += new System.EventHandler(this.loadSessionButton_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.groupBox2.Controls.Add(this.saveSessionButton);
-            this.groupBox2.Controls.Add(this.loadSessionButton);
-            this.groupBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.groupBox2.Location = new System.Drawing.Point(6, 335);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(182, 80);
-            this.groupBox2.TabIndex = 10;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Session";
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.groupBox3.Controls.Add(this.checkBoxBrowser);
-            this.groupBox3.Controls.Add(this.checkBoxConsole);
-            this.groupBox3.Location = new System.Drawing.Point(6, 157);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(240, 38);
-            this.groupBox3.TabIndex = 12;
-            this.groupBox3.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -551,12 +551,12 @@
             this.groupBox1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

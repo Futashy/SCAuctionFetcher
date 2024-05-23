@@ -31,9 +31,9 @@ namespace SCAuctionFetcher
             player = new System.Media.SoundPlayer("Sounds/CashSound.wav");
             player.Load();
 
-            Directory.CreateDirectory("Settings");
-            Directory.CreateDirectory("dll");
-            Directory.CreateDirectory("Sounds");
+            //Directory.CreateDirectory("Settings");
+            //Directory.CreateDirectory("dll");
+            //Directory.CreateDirectory("Sounds");
 
             if (!File.Exists("Settings/Items.json"))
             {
@@ -215,7 +215,6 @@ namespace SCAuctionFetcher
 
                 driver = new ChromeDriver(chromeDriverService, chromeOptions);
                 driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                 checkBoxBrowser.Enabled = false;
                 checkBoxConsole.Enabled = false;
