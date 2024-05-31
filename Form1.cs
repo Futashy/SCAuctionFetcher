@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Drawing;
@@ -10,7 +9,6 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using System.Threading.Tasks;
-using OpenQA.Selenium.Support.UI;
 
 namespace SCAuctionFetcher
 {
@@ -45,7 +43,7 @@ namespace SCAuctionFetcher
             }
         }
 
-        private void secTimer_Tick(object sender, EventArgs e)
+        private async void secTimer_Tick(object sender, EventArgs e)
         {
             for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
             {
@@ -65,25 +63,32 @@ namespace SCAuctionFetcher
 
                     flowLayoutPanel1.Controls[i].Controls[4].Text = timer.ToString();
                 }
-                else
+                else if (timer <= 1)
                 {
+                    secTimer.Stop();
                     //-----------------[Chrome Driver]-------------------------------------------------------//
                     driver.SwitchTo().Window(driver.WindowHandles[i]);
                     driver.Navigate().Refresh();
 
-                    var data = driver.FindElement(By.Id("nameCurrentItem"));
-                    flowLayoutPanel1.Controls[i].Controls[1].Text = data.GetAttribute("innerText");
+                    flowLayoutPanel1.Controls[i].Controls[1].Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
+                    (flowLayoutPanel1.Controls[i].Controls[0] as PictureBox).ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
+                    var tempPrice = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
 
-                    data = driver.FindElement(By.Id("iconItemData"));
-                    (flowLayoutPanel1.Controls[i].Controls[0] as PictureBox).ImageLocation = data.GetAttribute("currentSrc");
-
-                    data = driver.FindElement(By.Id("tempMinPrice"));
-                    flowLayoutPanel1.Controls[i].Controls[2].Text = data.GetAttribute("innerText");
-
-                    while (flowLayoutPanel1.Controls[i].Controls[2].Text == "0 RUB")
+                    int timeOutTimer = 0;
+                    int timeOut = 100;
+                    while (tempPrice == "0 RUB" & timeOutTimer < timeOut)
                     {
-                        Thread.Sleep(100);
-                        flowLayoutPanel1.Controls[i].Controls[2].Text = data.GetAttribute("innerText");
+                        //Thread.Sleep(100);
+                        await Task.Delay(100);
+                        tempPrice = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
+                        timeOutTimer++;
+                    }
+
+                    flowLayoutPanel1.Controls[i].Controls[2].Text = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
+
+                    if (timeOutTimer >= timeOut)
+                    {
+                        flowLayoutPanel1.Controls[i].Controls[2].Text = "Time Out!";
                     }
                     //---------------------------------------------------------------------------------------//
 
@@ -94,13 +99,14 @@ namespace SCAuctionFetcher
                     if (!Int32.TryParse(price, out int priceOut)) { }
                     if (!Int32.TryParse(flowLayoutPanel1.Controls[i].Controls[3].Text, out int priceThresholdOut)) { }
 
+                    secTimer.Start();
+
                     if (priceOut == 0)
                     {
                         flowLayoutPanel1.Controls[i].BackColor = Color.FromArgb(255, 255, 128);
                     }
                     else if (priceOut <= priceThresholdOut)
                     {
-                        //SystemSounds.Hand.Play();
                         player.Play();
 
                         flowLayoutPanel1.Controls[i].BackColor = Color.FromArgb(128, 0, 0);
@@ -117,150 +123,7 @@ namespace SCAuctionFetcher
 
         private void CreatePanelButton_Click(object sender, EventArgs e)
         {
-            //--------------------------------------------------[Main Panel]------------------------------------------------//
-            Panel panel = new Panel
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.FromArgb(40, 40, 40),
-                Width = 211,
-                Height = 125
-            };
-            //---------------------------------------------------[Picture]--------------------------------------------------//
-            PictureBox pictureBox = new PictureBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                SizeMode = PictureBoxSizeMode.StretchImage,
-                BackColor = Color.Gray,
-                Location = new Point(3, 3),
-                ImageLocation = "https://stalcraft-monitor.ru/db/icons/other/4k5gr.png",
-                Width = 64,
-                Height = 64
-            };
-            panel.Controls.Add(pictureBox);
-            //---------------------------------------------------[Info Box]-------------------------------------------------//
-            TextBox infoBox = new TextBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.Gray,
-                ForeColor = Color.White,
-                Location = new Point(73, 3),
-                Width = 133,
-                Height = 64,
-                Multiline = true,
-                TextAlign = HorizontalAlignment.Center,
-                Text = "Item Info",
-                Tag = idSetBox1.Text,
-                ReadOnly = true
-            };
-            panel.Controls.Add(infoBox);
-            //---------------------------------------------------[Price Box]------------------------------------------------//
-            TextBox priceBox = new TextBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.DimGray,
-                ForeColor = Color.White,
-                Location = new Point(3, 73),
-                Width = 133,
-                Height = 20,
-                TextAlign = HorizontalAlignment.Center,
-                Text = "10 000,00 ₽",
-                ReadOnly = true
-            };
-            panel.Controls.Add(priceBox);
-            //---------------------------------------------------[Price Threshold Box]--------------------------------------//
-            TextBox priceThresholdBox = new TextBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.DimGray,
-                ForeColor = Color.White,
-                Location = new Point(3, 99),
-                Width = 133,
-                Height = 20,
-                TextAlign = HorizontalAlignment.Center,
-                Text = PriceSetBox1.Text
-            };
-            panel.Controls.Add(priceThresholdBox);
-            //---------------------------------------------------[Timer Box]------------------------------------------------//
-            TextBox timerBox = new TextBox
-            {
-                BorderStyle = BorderStyle.FixedSingle,
-                BackColor = Color.DimGray,
-                ForeColor = Color.White,
-                Location = new Point(142, 73),
-                Width = 64,
-                Height = 20,
-                TextAlign = HorizontalAlignment.Center,
-                Text = timerSetBox1.Text,
-                Tag = timerSetBox1.Text,
-                ReadOnly = true
-            };
-            panel.Controls.Add(timerBox);
-            //--------------------------------------------------------------------------------------------------------------//
-            flowLayoutPanel1.Controls.Add(panel);
-            //------------------------------------------------------[Chrome Driver]-----------------------------------------//
-            if (driver == null)
-            {
-                var chromeOptions = new ChromeOptions();
-                var chromeDriverService = ChromeDriverService.CreateDefaultService();
-
-                if (checkBoxBrowser.Checked != true)
-                {
-                    chromeOptions.AddArgument("headless");
-                }
-
-                if (checkBoxConsole.Checked != true)
-                {
-                    chromeDriverService.HideCommandPromptWindow = true;
-                }
-
-                driver = new ChromeDriver(chromeDriverService, chromeOptions);
-                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
-                checkBoxBrowser.Enabled = false;
-                checkBoxConsole.Enabled = false;
-
-                item = infoBox.Tag.ToString();
-
-                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
-
-                var data = driver.FindElement(By.Id("nameCurrentItem"));
-                infoBox.Text = data.GetAttribute("innerText");
-
-                data = driver.FindElement(By.Id("iconItemData"));
-                pictureBox.ImageLocation = data.GetAttribute("currentSrc");
-
-                data = driver.FindElement(By.Id("tempMinPrice"));
-                priceBox.Text = data.GetAttribute("innerText");
-
-                while (priceBox.Text == "0 RUB")
-                {
-                    Thread.Sleep(100);
-                    priceBox.Text = data.GetAttribute("innerText");
-                }
-            }
-            else if (driver.WindowHandles.Count < flowLayoutPanel1.Controls.Count)
-            {
-                driver.SwitchTo().NewWindow(WindowType.Tab);
-
-                item = infoBox.Tag.ToString();
-
-                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
-
-                var data = driver.FindElement(By.Id("nameCurrentItem"));
-                infoBox.Text = data.GetAttribute("innerText");
-
-                data = driver.FindElement(By.Id("iconItemData"));
-                pictureBox.ImageLocation = data.GetAttribute("currentSrc");
-
-                data = driver.FindElement(By.Id("tempMinPrice"));
-                priceBox.Text = data.GetAttribute("innerText");
-
-                while (priceBox.Text == "0 RUB")
-                {
-                    Thread.Sleep(100);
-                    priceBox.Text = data.GetAttribute("innerText");
-                }
-            }
+            CreateNewPanel();
         }
 
         private void deleteButton1_Click(object sender, EventArgs e)
@@ -274,6 +137,7 @@ namespace SCAuctionFetcher
                 {
                     driver.SwitchTo().Window(driver.WindowHandles[i]);
                     driver.Close();
+                    driver.SwitchTo().Window(driver.WindowHandles[i - 1]);
                 }
                 else
                 {
@@ -525,20 +389,9 @@ namespace SCAuctionFetcher
 
                         driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
 
-                        var data = driver.FindElement(By.Id("nameCurrentItem"));
-                        infoBox.Text = data.GetAttribute("innerText");
-
-                        data = driver.FindElement(By.Id("iconItemData"));
-                        pictureBox.ImageLocation = data.GetAttribute("currentSrc");
-
-                        data = driver.FindElement(By.Id("tempMinPrice"));
-                        priceBox.Text = data.GetAttribute("innerText");
-
-                        while (priceBox.Text == "0 RUB")
-                        {
-                            Thread.Sleep(100);
-                            priceBox.Text = data.GetAttribute("innerText");
-                        }
+                        infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
+                        pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
+                        priceBox.Text = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
                     }
                     else if (driver.WindowHandles.Count < flowLayoutPanel1.Controls.Count)
                     {
@@ -548,24 +401,144 @@ namespace SCAuctionFetcher
 
                         driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
 
-                        var data = driver.FindElement(By.Id("nameCurrentItem"));
-                        infoBox.Text = data.GetAttribute("innerText");
-
-                        data = driver.FindElement(By.Id("iconItemData"));
-                        pictureBox.ImageLocation = data.GetAttribute("currentSrc");
-
-                        data = driver.FindElement(By.Id("tempMinPrice"));
-                        priceBox.Text = data.GetAttribute("innerText");
-
-                        while (priceBox.Text == "0 RUB")
-                        {
-                            Thread.Sleep(100);
-                            priceBox.Text = data.GetAttribute("innerText");
-                        }
+                        infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
+                        pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
+                        priceBox.Text = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
                     }
                 }
             }
         }
+
+        private void CreateNewPanel()
+        {
+            //--------------------------------------------------[Main Panel]------------------------------------------------//
+            Panel panel = new Panel
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.FromArgb(40, 40, 40),
+                Width = 211,
+                Height = 125
+            };
+            //---------------------------------------------------[Picture]--------------------------------------------------//
+            PictureBox pictureBox = new PictureBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                BackColor = Color.Gray,
+                Location = new Point(3, 3),
+                ImageLocation = "https://stalcraft-monitor.ru/db/icons/other/4k5gr.png",
+                Width = 64,
+                Height = 64
+            };
+            panel.Controls.Add(pictureBox);
+            //---------------------------------------------------[Info Box]-------------------------------------------------//
+            TextBox infoBox = new TextBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.Gray,
+                ForeColor = Color.White,
+                Location = new Point(73, 3),
+                Width = 133,
+                Height = 64,
+                Multiline = true,
+                TextAlign = HorizontalAlignment.Center,
+                Text = "Item Info",
+                Tag = idSetBox1.Text,
+                ReadOnly = true
+            };
+            panel.Controls.Add(infoBox);
+            //---------------------------------------------------[Price Box]------------------------------------------------//
+            TextBox priceBox = new TextBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.DimGray,
+                ForeColor = Color.White,
+                Location = new Point(3, 73),
+                Width = 133,
+                Height = 20,
+                TextAlign = HorizontalAlignment.Center,
+                Text = "10 000,00 ₽",
+                ReadOnly = true
+            };
+            panel.Controls.Add(priceBox);
+            //---------------------------------------------------[Price Threshold Box]--------------------------------------//
+            TextBox priceThresholdBox = new TextBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.DimGray,
+                ForeColor = Color.White,
+                Location = new Point(3, 99),
+                Width = 133,
+                Height = 20,
+                TextAlign = HorizontalAlignment.Center,
+                Text = PriceSetBox1.Text
+            };
+            panel.Controls.Add(priceThresholdBox);
+            //---------------------------------------------------[Timer Box]------------------------------------------------//
+            TextBox timerBox = new TextBox
+            {
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.DimGray,
+                ForeColor = Color.White,
+                Location = new Point(142, 73),
+                Width = 64,
+                Height = 20,
+                TextAlign = HorizontalAlignment.Center,
+                Text = timerSetBox1.Text,
+                Tag = timerSetBox1.Text,
+                ReadOnly = true
+            };
+            panel.Controls.Add(timerBox);
+            //--------------------------------------------------------------------------------------------------------------//
+            flowLayoutPanel1.Controls.Add(panel);
+            //------------------------------------------------------[Chrome Driver]-----------------------------------------//
+            if (driver == null)
+            {
+                var chromeOptions = new ChromeOptions();
+                var chromeDriverService = ChromeDriverService.CreateDefaultService();
+
+                if (checkBoxBrowser.Checked != true)
+                {
+                    chromeOptions.AddArgument("headless");
+                }
+
+                if (checkBoxConsole.Checked != true)
+                {
+                    chromeDriverService.HideCommandPromptWindow = true;
+                }
+
+                driver = new ChromeDriver(chromeDriverService, chromeOptions);
+                driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
+                checkBoxBrowser.Enabled = false;
+                checkBoxConsole.Enabled = false;
+
+                item = infoBox.Tag.ToString();
+
+                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+
+                infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
+                pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
+                priceBox.Text = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
+            }
+            else if (driver.WindowHandles.Count < flowLayoutPanel1.Controls.Count)
+            {
+                driver.SwitchTo().NewWindow(WindowType.Tab);
+
+                item = infoBox.Tag.ToString();
+
+                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+
+                infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
+                pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
+                priceBox.Text = driver.FindElement(By.Id("tempMinPrice")).GetAttribute("innerText");
+            }
+        }
+
+        //private async Task AsyncWork()
+        //{
+
+        //}
 
         #endregion
 
@@ -614,6 +587,5 @@ namespace SCAuctionFetcher
         }
 
         #endregion
-
     }
 }
