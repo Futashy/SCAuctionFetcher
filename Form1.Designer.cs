@@ -66,6 +66,8 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.MuteButton = new System.Windows.Forms.Button();
+            this.CloseButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -81,6 +83,8 @@
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.CloseButton);
+            this.panel1.Controls.Add(this.MuteButton);
             this.panel1.Controls.Add(this.infoBox1);
             this.panel1.Controls.Add(this.timerBox1);
             this.panel1.Controls.Add(this.priceThresholdBox);
@@ -331,7 +335,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 11;
-            this.label4.Text = "Version : 1.2.0";
+            this.label4.Text = "Version : 1.2.1";
             // 
             // tabControl1
             // 
@@ -551,6 +555,30 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Debug";
             // 
+            // MuteButton
+            // 
+            this.MuteButton.BackColor = System.Drawing.Color.DimGray;
+            this.MuteButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.MuteButton.ForeColor = System.Drawing.Color.White;
+            this.MuteButton.Location = new System.Drawing.Point(142, 99);
+            this.MuteButton.Name = "MuteButton";
+            this.MuteButton.Size = new System.Drawing.Size(39, 20);
+            this.MuteButton.TabIndex = 7;
+            this.MuteButton.Text = "Mute";
+            this.MuteButton.UseVisualStyleBackColor = false;
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.BackColor = System.Drawing.Color.IndianRed;
+            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.CloseButton.ForeColor = System.Drawing.Color.White;
+            this.CloseButton.Location = new System.Drawing.Point(185, 99);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(20, 20);
+            this.CloseButton.TabIndex = 7;
+            this.CloseButton.Text = "X";
+            this.CloseButton.UseVisualStyleBackColor = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -621,6 +649,8 @@
         private System.Windows.Forms.Button loadSessionButton;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button CloseButton;
+        private System.Windows.Forms.Button MuteButton;
     }
 }
 

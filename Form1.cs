@@ -54,6 +54,8 @@ namespace SCAuctionFetcher
                 //var priceThreshold = flowLayoutPanel1.Controls[i].Controls[3].Text;
                 var timerText = flowLayoutPanel1.Controls[i].Controls[4].Text;
                 var timerDefault = flowLayoutPanel1.Controls[i].Controls[4].Tag;
+                //var muteButton = flowLayoutPanel1.Controls[i].Controls[5].Text;
+                //var closeButton = flowLayoutPanel1.Controls[i].Controls[6].Text;
 
                 var timer = Int32.Parse(timerText);
 
@@ -107,11 +109,15 @@ namespace SCAuctionFetcher
                     }
                     else if (priceOut <= priceThresholdOut)
                     {
-                        player.Play();
+                        if (flowLayoutPanel1.Controls[i].Controls[5].Tag.Equals(false))
+                        {
+                            player.Play();
+
+                            this.TopMost = true;
+                            this.TopMost = false;
+                        }
 
                         flowLayoutPanel1.Controls[i].BackColor = Color.FromArgb(128, 0, 0);
-                        this.TopMost = true;
-                        this.TopMost = false;
                     }
                     else
                     {
@@ -124,6 +130,7 @@ namespace SCAuctionFetcher
         private void CreatePanelButton_Click(object sender, EventArgs e)
         {
             CreateNewPanel();
+            secTimer.Start();
         }
 
         private void deleteButton1_Click(object sender, EventArgs e)
@@ -170,6 +177,7 @@ namespace SCAuctionFetcher
         private void loadSessionButton_Click(object sender, EventArgs e)
         {
             DeserializePanel();
+            secTimer.Start();
         }
 
         #region Methods
@@ -281,13 +289,16 @@ namespace SCAuctionFetcher
 
                 for (int i = 0; i < items.Count; i++)
                 {
+                    var panelCount = flowLayoutPanel1.Controls.Count;
                     //--------------------------------------------------[Main Panel]------------------------------------------------//
                     Panel panel = new Panel
                     {
                         BorderStyle = BorderStyle.FixedSingle,
                         BackColor = Color.FromArgb(40, 40, 40),
                         Width = 211,
-                        Height = 125
+                        Height = 125,
+                        AccessibleName = $"Panel{panelCount}",
+                        Tag = panelCount
                     };
                     //---------------------------------------------------[Picture]--------------------------------------------------//
                     PictureBox pictureBox = new PictureBox
@@ -359,6 +370,34 @@ namespace SCAuctionFetcher
                         ReadOnly = true
                     };
                     panel.Controls.Add(timerBox);
+                    //---------------------------------------------------[Mute Button]----------------------------------------------//
+                    Button muteButton = new Button
+                    {
+                        FlatStyle = FlatStyle.Popup,
+                        BackColor = Color.DimGray,
+                        ForeColor = Color.White,
+                        Location = new Point(142, 99),
+                        Width = 39,
+                        Height = 20,
+                        Text = "Mute",
+                        Tag = false
+                    };
+                    panel.Controls.Add(muteButton);
+                    muteButton.Click += MuteButton_Click;
+                    //---------------------------------------------------[Close Button]---------------------------------------------//
+                    Button closeButton = new Button
+                    {
+                        FlatStyle = FlatStyle.Popup,
+                        BackColor = Color.IndianRed,
+                        ForeColor = Color.White,
+                        Location = new Point(185, 99),
+                        Width = 20,
+                        Height = 20,
+                        Text = "X",
+                        Tag = false
+                    };
+                    panel.Controls.Add(closeButton);
+                    closeButton.Click += CloseButton_Click;
                     //--------------------------------------------------------------------------------------------------------------//
                     flowLayoutPanel1.Controls.Add(panel);
 
@@ -411,13 +450,16 @@ namespace SCAuctionFetcher
 
         private void CreateNewPanel()
         {
+            var panelCount = flowLayoutPanel1.Controls.Count;
             //--------------------------------------------------[Main Panel]------------------------------------------------//
             Panel panel = new Panel
             {
                 BorderStyle = BorderStyle.FixedSingle,
                 BackColor = Color.FromArgb(40, 40, 40),
-                Width = 211,
-                Height = 125
+                Width = 210,
+                Height = 125,
+                AccessibleName = $"Panel{panelCount}",
+                Tag = panelCount
             };
             //---------------------------------------------------[Picture]--------------------------------------------------//
             PictureBox pictureBox = new PictureBox
@@ -489,6 +531,34 @@ namespace SCAuctionFetcher
                 ReadOnly = true
             };
             panel.Controls.Add(timerBox);
+            //---------------------------------------------------[Mute Button]----------------------------------------------//
+            Button muteButton = new Button
+            {
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.DimGray,
+                ForeColor = Color.White,
+                Location = new Point(142, 99),
+                Width = 39,
+                Height = 20,
+                Text = "Mute",
+                Tag = false
+            };
+            panel.Controls.Add(muteButton);
+            muteButton.Click += MuteButton_Click;
+            //---------------------------------------------------[Close Button]---------------------------------------------//
+            Button closeButton = new Button
+            {
+                FlatStyle = FlatStyle.Popup,
+                BackColor = Color.IndianRed,
+                ForeColor = Color.White,
+                Location = new Point(185, 99),
+                Width = 20,
+                Height = 20,
+                Text = "X",
+                Tag = false
+            };
+            panel.Controls.Add(closeButton);
+            closeButton.Click += CloseButton_Click;
             //--------------------------------------------------------------------------------------------------------------//
             flowLayoutPanel1.Controls.Add(panel);
             //------------------------------------------------------[Chrome Driver]-----------------------------------------//
@@ -535,10 +605,62 @@ namespace SCAuctionFetcher
             }
         }
 
-        //private async Task AsyncWork()
-        //{
+        private void CloseButton_Click(object sender, EventArgs e)
+        {
+            Button closeButton = sender as Button;
+            closeButton.Tag = true;
 
-        //}
+            int index = (int)closeButton.Parent.Tag;
+
+            for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
+            {
+                if (flowLayoutPanel1.Controls[i].Controls[6].Tag.Equals(true))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            for (int i = 0; i < driver.WindowHandles.Count; i++)
+            {
+                if (driver.WindowHandles.Count > 1)
+                {
+                    if (i != index)
+                    {
+                        string lastTab = driver.WindowHandles[i];
+
+                        driver.SwitchTo().Window(driver.WindowHandles[index]);
+                        driver.Close();
+                        driver.SwitchTo().Window(lastTab);
+                        flowLayoutPanel1.Controls.RemoveAt(index);
+                        break;
+                    }
+                }
+                else
+                {
+                    driver.Quit();
+                    driver = null;
+                    flowLayoutPanel1.Controls.Clear();
+                    secTimer.Stop();
+                    break;
+                }
+            }
+        }
+
+        private void MuteButton_Click(object sender, EventArgs e)
+        {
+            Button muteButton = sender as Button;
+            if (muteButton.Tag.Equals(false))
+            {
+                muteButton.Tag = true;
+                muteButton.BackColor = Color.Tan;
+            }
+            else
+            {
+                muteButton.Tag = false;
+                muteButton.BackColor = Color.DimGray;
+            }
+        }
 
         #endregion
 
