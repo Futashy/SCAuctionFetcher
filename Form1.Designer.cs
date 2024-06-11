@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.CloseButton = new System.Windows.Forms.Button();
+            this.MuteButton = new System.Windows.Forms.Button();
             this.infoBox1 = new System.Windows.Forms.TextBox();
             this.timerBox1 = new System.Windows.Forms.TextBox();
             this.priceThresholdBox = new System.Windows.Forms.TextBox();
@@ -66,8 +68,6 @@
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.MuteButton = new System.Windows.Forms.Button();
-            this.CloseButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -94,6 +94,30 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(210, 125);
             this.panel1.TabIndex = 6;
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.BackColor = System.Drawing.Color.IndianRed;
+            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.CloseButton.ForeColor = System.Drawing.Color.White;
+            this.CloseButton.Location = new System.Drawing.Point(185, 99);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(20, 20);
+            this.CloseButton.TabIndex = 7;
+            this.CloseButton.Text = "X";
+            this.CloseButton.UseVisualStyleBackColor = false;
+            // 
+            // MuteButton
+            // 
+            this.MuteButton.BackColor = System.Drawing.Color.DimGray;
+            this.MuteButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.MuteButton.ForeColor = System.Drawing.Color.White;
+            this.MuteButton.Location = new System.Drawing.Point(142, 99);
+            this.MuteButton.Name = "MuteButton";
+            this.MuteButton.Size = new System.Drawing.Size(39, 20);
+            this.MuteButton.TabIndex = 7;
+            this.MuteButton.Text = "Mute";
+            this.MuteButton.UseVisualStyleBackColor = false;
             // 
             // infoBox1
             // 
@@ -335,7 +359,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(77, 15);
             this.label4.TabIndex = 11;
-            this.label4.Text = "Version : 1.2.1";
+            this.label4.Text = "Version : 1.2.2";
             // 
             // tabControl1
             // 
@@ -554,30 +578,6 @@
             this.tabPage3.Size = new System.Drawing.Size(339, 421);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Debug";
-            // 
-            // MuteButton
-            // 
-            this.MuteButton.BackColor = System.Drawing.Color.DimGray;
-            this.MuteButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.MuteButton.ForeColor = System.Drawing.Color.White;
-            this.MuteButton.Location = new System.Drawing.Point(142, 99);
-            this.MuteButton.Name = "MuteButton";
-            this.MuteButton.Size = new System.Drawing.Size(39, 20);
-            this.MuteButton.TabIndex = 7;
-            this.MuteButton.Text = "Mute";
-            this.MuteButton.UseVisualStyleBackColor = false;
-            // 
-            // CloseButton
-            // 
-            this.CloseButton.BackColor = System.Drawing.Color.IndianRed;
-            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.CloseButton.ForeColor = System.Drawing.Color.White;
-            this.CloseButton.Location = new System.Drawing.Point(185, 99);
-            this.CloseButton.Name = "CloseButton";
-            this.CloseButton.Size = new System.Drawing.Size(20, 20);
-            this.CloseButton.TabIndex = 7;
-            this.CloseButton.Text = "X";
-            this.CloseButton.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 

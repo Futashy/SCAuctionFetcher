@@ -426,7 +426,18 @@ namespace SCAuctionFetcher
 
                         item = infoBox.Tag.ToString();
 
-                        driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                        try
+                        {
+                            driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                        }
+                        catch
+                        {
+                            MessageBox.Show(
+                                "The Required URL Can't Be Reached!",
+                                "Error!",
+                                MessageBoxButtons.OK
+                                );
+                        }
 
                         infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
                         pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
@@ -438,7 +449,18 @@ namespace SCAuctionFetcher
 
                         item = infoBox.Tag.ToString();
 
-                        driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                        try
+                        {
+                            driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                        }
+                        catch
+                        {
+                            MessageBox.Show(
+                                "The Required URL Can't Be Reached!",
+                                "Error!",
+                                MessageBoxButtons.OK
+                                );
+                        }
 
                         infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
                         pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
@@ -585,7 +607,19 @@ namespace SCAuctionFetcher
 
                 item = infoBox.Tag.ToString();
 
-                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                try
+                {
+                    driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        "The Required URL Can't Be Reached!",
+                        "Error!",
+                        MessageBoxButtons.OK
+                        );
+                }
+
 
                 infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
                 pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
@@ -597,7 +631,18 @@ namespace SCAuctionFetcher
 
                 item = infoBox.Tag.ToString();
 
-                driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                try
+                {
+                    driver.Navigate().GoToUrl($"https://stalcraft-monitor.ru/auction?item={item}");
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        "The Required URL Can't Be Reached!",
+                        "Error!",
+                        MessageBoxButtons.OK
+                        );
+                }
 
                 infoBox.Text = driver.FindElement(By.Id("nameCurrentItem")).GetAttribute("innerText");
                 pictureBox.ImageLocation = driver.FindElement(By.Id("iconItemData")).GetAttribute("currentSrc");
